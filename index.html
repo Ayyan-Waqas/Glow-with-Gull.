@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glow with Gull - Luxury Beauty Salon in DHA Lahore | Premium Makeup & Skincare</title>
+    <meta name="description" content="Experience luxury beauty treatments at Glow with Gull in DHA Lahore. Expert bridal makeup, hydra facial, hair styling, and premium skincare services.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'nude': '#F5E6D3',
+                        'blush': '#FFD5D5',
+                        'rose-gold': '#B76E79',
+                        'champagne': '#F7E7CE',
+                    },
+                    fontFamily: {
+                        'serif': ['Cormorant Garamond', 'serif'],
+                        'sans': ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            background: #fff;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #B76E79;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(183, 110, 121, 0.3);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fff 0%, #FFD5D5 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            font-size: 3rem;
+            font-family: 'Cormorant Garamond', serif;
+            color: #B76E79;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        /* Particles Background */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #B76E79, transparent);
+            border-radius: 50%;
+            animation: float 15s infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-200px) translateX(-50px); }
+            75% { transform: translateY(-100px) translateX(100px); }
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        /* Navbar */
+        .navbar {
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #B76E79 0%, #D4A5A5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Luxury Button */
+        .luxury-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .luxury-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+            transform: translate(-50%, -50%);
+        }
+
+        .luxury-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .luxury-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Service Card */
+        .service-card {
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: linear-gradient(135deg, #fff 0%, #FFD5D5 100%);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #B76E79, #FFD5D5, #F5E6D3, #B76E79);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s;
+            background-size: 300% 300%;
+            animation: gradient 3s ease infinite;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(183, 110, 121, 0.3);
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Counter Animation */
+        .counter {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #B76E79;
+        }
+
+        /* Gallery Hover */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        .gallery-item img {
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.2);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(183, 110, 121, 0.8), rgba(255, 213, 213, 0.8));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        /* Testimonial Card */
+        .testimonial-card {
+            background: linear-gradient(135deg, #fff 0%, #FFD5D5 100%);
+            border-radius: 20px;
+            transition: all 0.4s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(183, 110, 121, 0.2);
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: bounce 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Form Input */
+        .luxury-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .luxury-input:focus {
+            outline: none;
+            border-color: #B76E79;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(183, 110, 121, 0.2);
+        }
+
+        /* Star Rating */
+        .star {
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .counter {
+                font-size: 2rem;
+            }
+            
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        /* Hero Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 1s ease;
+        }
+
+        /* Shine Effect */
+        .shine {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor hidden md:block"></div>
+    <div class="cursor-follower hidden md:block"></div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">Glow with Gull</div>
+            <div class="mt-4">
+                <div class="w-48 h-1 bg-gray-200 rounded-full overflow-hidden mx-auto">
+                    <div class="h-full bg-gradient-to-r from-rose-gold to-blush rounded-full animate-pulse" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar fixed w-full z-50 py-4 px-6 md:px-12 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="logo">
+                <h1 class="text-2xl md:text-3xl font-serif font-bold gradient-text">Glow with Gull</h1>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden lg:flex items-center space-x-8">
+                <a href="#home" class="nav-link text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Home</a>
+                <a href="#about" class="nav-link text-gray-700 hover:text-rose-gold transition duration-300 font-medium">About</a>
+                <a href="#services" class="nav-link text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Services</a>
+                <a href="#gallery" class="nav-link text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Gallery</a>
+                <a href="#testimonials" class="nav-link text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Testimonials</a>
+                <a href="#contact" class="nav-link text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Contact</a>
+                <a href="#booking" class="luxury-btn bg-gradient-to-r from-rose-gold to-blush text-white px-6 py-2 rounded-full font-medium">
+                    <span>Book Now</span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="lg:hidden text-gray-700 text-2xl" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu hidden lg:hidden absolute top-full left-0 w-full glass shadow-lg" id="mobileMenu">
+            <div class="flex flex-col space-y-4 p-6">
+                <a href="#home" class="text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Home</a>
+                <a href="#about" class="text-gray-700 hover:text-rose-gold transition duration-300 font-medium">About</a>
+                <a href="#services" class="text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Services</a>
+                <a href="#gallery" class="text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Gallery</a>
+                <a href="#testimonials" class="text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Testimonials</a>
+                <a href="#contact" class="text-gray-700 hover:text-rose-gold transition duration-300 font-medium">Contact</a>
+                <a href="#booking" class="luxury-btn bg-gradient-to-r from-rose-gold to-blush text-white px-6 py-3 rounded-full font-medium text-center">
+                    <span>Book Now</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Particles Background -->
+        <div class="particles" id="particles"></div>
+        
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1920&q=80" alt="Luxury Beauty Salon" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-white">
+            <div class="max-w-3xl fade-in-up">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-bold mb-6 leading-tight">
+                    Reveal Your <span class="text-blush">True Glow</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-10 text-gray-200 font-light">
+                    Luxury Beauty, Makeup & Skincare Experience in DHA Lahore
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#booking" class="luxury-btn bg-gradient-to-r from-rose-gold to-blush text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition duration-300">
+                        <span>Book Appointment</span>
+                    </a>
+                    <a href="#services" class="luxury-btn glass border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-rose-gold transition duration-300">
+                        <span>Explore Services</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10">
+            <div class="animate-bounce">
+                <i class="fas fa-chevron-down text-white text-2xl"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 md:py-32 bg-gradient-to-b from-white to-nude">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Image -->
+                <div class="reveal">
+                    <div class="relative">
+                        <div class="absolute -top-6 -left-6 w-full h-full bg-gradient-to-br from-rose-gold to-blush rounded-3xl opacity-20"></div>
+                        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80" alt="About Glow with Gull" class="relative rounded-3xl shadow-2xl w-full h-[400px] md:h-[500px] object-cover">
+                        <div class="absolute -bottom-6 -right-6 glass p-6 rounded-2xl">
+                            <div class="text-center">
+                                <div class="text-4xl font-bold gradient-text">500+</div>
+                                <div class="text-gray-700 font-medium">Happy Clients</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="reveal">
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold mb-6 gradient-text">Welcome to Glow with Gull</h2>
+                    <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                        Step into a world of luxury and elegance at Glow with Gull, DHA Lahore's premier beauty destination. We specialize in creating stunning transformations that enhance your natural beauty and boost your confidence.
+                    </p>
+                    <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                        Our team of highly skilled beauty professionals is dedicated to providing you with personalized, world-class services using premium products and cutting-edge techniques. From bridal glamour to everyday elegance, we're here to make you glow.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span class="text-gray-700 font-medium">Certified Professional Team</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span class="text-gray-700 font-medium">Premium International Products</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span class="text-gray-700 font-medium">Hygienic & Luxurious Environment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 md:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-4 gradient-text">Our Premium Services</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Indulge in our exclusive range of beauty treatments designed to pamper and transform
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                <!-- Service Card 1 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-ring"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Bridal Makeup</h3>
+                    <p class="text-gray-600 text-sm">Stunning bridal looks for your special day</p>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center" style="animation-delay: 0.1s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Party Makeup</h3>
+                    <p class="text-gray-600 text-sm">Glamorous looks for every occasion</p>
+                </div>
+
+                <!-- Service Card 3 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center" style="animation-delay: 0.2s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Hydra Facial</h3>
+                    <p class="text-gray-600 text-sm">Deep cleansing & rejuvenation</p>
+                </div>
+
+                <!-- Service Card 4 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center" style="animation-delay: 0.3s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Hair Styling</h3>
+                    <p class="text-gray-600 text-sm">Expert cuts, styling & treatments</p>
+                </div>
+
+                <!-- Service Card 5 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center" style="animation-delay: 0.4s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Hair Coloring</h3>
+                    <p class="text-gray-600 text-sm">Premium colors & balayage</p>
+                </div>
+
+                <!-- Service Card 6 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center" style="animation-delay: 0.5s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Skin Treatments</h3>
+                    <p class="text-gray-600 text-sm">Advanced skincare solutions</p>
+                </div>
+
+                <!-- Service Card 7 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center" style="animation-delay: 0.6s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-hand-sparkles"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Manicure & Pedicure</h3>
+                    <p class="text-gray-600 text-sm">Luxury hand & foot care</p>
+                </div>
+
+                <!-- Service Card 8 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center" style="animation-delay: 0.7s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Nail Art</h3>
+                    <p class="text-gray-600 text-sm">Creative & trendy nail designs</p>
+                </div>
+
+                <!-- Service Card 9 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center" style="animation-delay: 0.8s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Waxing</h3>
+                    <p class="text-gray-600 text-sm">Gentle & effective hair removal</p>
+                </div>
+
+                <!-- Service Card 10 -->
+                <div class="service-card reveal p-6 rounded-2xl text-center" style="animation-delay: 0.9s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-3xl">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Eyelash Extensions</h3>
+                    <p class="text-gray-600 text-sm">Voluminous & natural lashes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="py-20 md:py-32 bg-gradient-to-b from-nude to-white">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-4 gradient-text">Why Choose Glow with Gull?</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Experience the difference with our commitment to excellence
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="reveal text-center">
+                    <div class="mb-6">
+                        <div class="counter text-5xl font-bold gradient-text" data-target="500">0</div>
+                        <div class="text-lg text-gray-700 font-medium mt-2">Happy Clients</div>
+                    </div>
+                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-2xl mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Professional Staff</h3>
+                    <p class="text-gray-600">Certified experts with years of experience</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="reveal text-center" style="animation-delay: 0.1s;">
+                    <div class="mb-6">
+                        <div class="counter text-5xl font-bold gradient-text" data-target="100">0</div>
+                        <div class="text-lg text-gray-700 font-medium mt-2">Premium Products</div>
+                    </div>
+                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-2xl mb-4">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Quality Products</h3>
+                    <p class="text-gray-600">International brands for best results</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="reveal text-center" style="animation-delay: 0.2s;">
+                    <div class="mb-6">
+                        <div class="counter text-5xl font-bold gradient-text" data-target="5">0</div>
+                        <div class="text-lg text-gray-700 font-medium mt-2">Years Experience</div>
+                    </div>
+                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-2xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Hygienic Environment</h3>
+                    <p class="text-gray-600">Sterilized tools & clean facilities</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="reveal text-center" style="animation-delay: 0.3s;">
+                    <div class="mb-6">
+                        <div class="counter text-5xl font-bold gradient-text" data-target="15">0</div>
+                        <div class="text-lg text-gray-700 font-medium mt-2">Services</div>
+                    </div>
+                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-2xl mb-4">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Luxury Experience</h3>
+                    <p class="text-gray-600">Personalized care & attention</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 md:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-4 gradient-text">Our Gallery</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Explore our stunning transformations and luxury salon experience
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Gallery Item 1 -->
+                <div class="gallery-item reveal h-64 md:h-80">
+                    <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80" alt="Bridal Makeup" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 2 -->
+                <div class="gallery-item reveal h-64 md:h-80" style="animation-delay: 0.1s;">
+                    <img src="https://images.unsplash.com/photo-1522337094846-8a818192de1f?w=600&q=80" alt="Hair Styling" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 3 -->
+                <div class="gallery-item reveal h-64 md:h-80" style="animation-delay: 0.2s;">
+                    <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600&q=80" alt="Skin Treatment" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 4 -->
+                <div class="gallery-item reveal h-64 md:h-80" style="animation-delay: 0.3s;">
+                    <img src="https://images.unsplash.com/photo-1519415387722-a1c3bbef716c?w=600&q=80" alt="Nail Art" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 5 -->
+                <div class="gallery-item reveal h-64 md:h-80 col-span-2" style="animation-delay: 0.4s;">
+                    <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=800&q=80" alt="Salon Interior" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 6 -->
+                <div class="gallery-item reveal h-64 md:h-80" style="animation-delay: 0.5s;">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80" alt="Makeup Session" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 7 -->
+                <div class="gallery-item reveal h-64 md:h-80" style="animation-delay: 0.6s;">
+                    <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80" alt="Facial Treatment" class="w-full h-full object-cover">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus text-white text-3xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12 reveal">
+                <a href="https://www.instagram.com/glowwithgull" target="_blank" class="luxury-btn bg-gradient-to-r from-rose-gold to-blush text-white px-8 py-4 rounded-full text-lg font-semibold inline-block">
+                    <span><i class="fab fa-instagram mr-2"></i> Follow Us on Instagram</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 md:py-32 bg-gradient-to-b from-nude to-white">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-4 gradient-text">What Our Clients Say</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Read testimonials from our satisfied clients
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card reveal p-8 shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <img src="https://i.pravatar.cc/100?img=1" alt="Client" class="w-16 h-16 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-gray-800">Ayesha Khan</h4>
+                            <div class="flex">
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">
+                        "Absolutely stunning bridal makeup! Gull made me look and feel like a queen on my wedding day. The quality of service and attention to detail is unmatched. Highly recommended!"
+                    </p>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card reveal p-8 shadow-lg" style="animation-delay: 0.1s;">
+                    <div class="flex items-center mb-4">
+                        <img src="https://i.pravatar.cc/100?img=5" alt="Client" class="w-16 h-16 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-gray-800">Sarah Ahmed</h4>
+                            <div class="flex">
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">
+                        "The hydra facial treatment was amazing! My skin has never looked better. The salon atmosphere is so luxurious and relaxing. I'm a regular customer now!"
+                    </p>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card reveal p-8 shadow-lg" style="animation-delay: 0.2s;">
+                    <div class="flex items-center mb-4">
+                        <img src="https://i.pravatar.cc/100?img=9" alt="Client" class="w-16 h-16 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-gray-800">Hira Malik</h4>
+                            <div class="flex">
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                                <i class="star fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">
+                        "Best salon in Lahore! The staff is professional, friendly, and truly talented. My hair coloring turned out perfect. The products they use are top quality!"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="py-20 md:py-32 bg-white">
+        <div class="max-w-4xl mx-auto px-6 md:px-12">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-4 gradient-text">Book Your Appointment</h2>
+                <p class="text-gray-600 text-lg">
+                    Transform your look with our luxury beauty services
+                </p>
+            </div>
+
+            <form class="reveal glass p-8 md:p-12 rounded-3xl shadow-2xl" id="bookingForm">
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Your Name</label>
+                        <input type="text" name="name" required class="luxury-input w-full px-4 py-3 rounded-xl" placeholder="Enter your name">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Phone Number</label>
+                           <input type="text" name="phone" required class="luxury-input w-full px-4 py-3 rounded-xl" placeholder="Enter your phone number">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Select Service</label>
+                        <select name="service" required class="luxury-input w-full px-4 py-3 rounded-xl">
+                            <option value="">Choose a service</option>
+                            <option value="Bridal Makeup">Bridal Makeup</option>
+                            <option value="Party Makeup">Party Makeup</option>
+                            <option value="Hydra Facial">Hydra Facial</option>
+                            <option value="Hair Styling">Hair Styling</option>
+                            <option value="Hair Coloring">Hair Coloring</option>
+                            <option value="Skin Treatments">Skin Treatments</option>
+                            <option value="Manicure & Pedicure">Manicure & Pedicure</option>
+                            <option value="Nail Art">Nail Art</option>
+                            <option value="Waxing">Waxing</option>
+                            <option value="Eyelash Extensions">Eyelash Extensions</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Preferred Date</label>
+                        <input type="date" name="date" required class="luxury-input w-full px-4 py-3 rounded-xl">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2">Additional Message (Optional)</label>
+                    <textarea name="message" rows="4" class="luxury-input w-full px-4 py-3 rounded-xl" placeholder="Any special requests or questions..."></textarea>
+                </div>
+
+                <button type="submit" class="luxury-btn w-full bg-gradient-to-r from-rose-gold to-blush text-white px-8 py-4 rounded-full text-lg font-semibold shine">
+                    <span><i class="fas fa-calendar-check mr-2"></i> Book Appointment</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 md:py-32 bg-gradient-to-b from-nude to-white">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-4 gradient-text">Get In Touch</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Visit us or contact us for bookings and inquiries
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Contact Info -->
+                <div class="reveal space-y-8">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-xl flex-shrink-0">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">Our Location</h3>
+                            <p class="text-gray-600">176 CCA 3rd floor DHA phase 6 CCA, Sector C DHA Phase 6, Lahore, 54920, Pakistan</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-xl flex-shrink-0">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">Phone Number</h3>
+                            <p class="text-gray-600">
+                                <a href="tel:+923141114855" class="hover:text-rose-gold transition">+92 314 1114855</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-xl flex-shrink-0">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">Working Hours</h3>
+                            <p class="text-gray-600">Monday - Sunday: 11:00 AM - 8:00 PM</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white text-xl flex-shrink-0">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">Follow Us</h3>
+                            <div class="flex space-x-4">
+                                <a href="https://www.facebook.com/glowwithgull" target="_blank" class="w-10 h-10 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white hover:scale-110 transition">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="https://www.instagram.com/glowwithgull" target="_blank" class="w-10 h-10 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white hover:scale-110 transition">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="https://wa.me/923141114855" target="_blank" class="w-10 h-10 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white hover:scale-110 transition">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                                <a href="https://www.tiktok.com/@glowwithgull" target="_blank" class="w-10 h-10 bg-gradient-to-br from-rose-gold to-blush rounded-full flex items-center justify-center text-white hover:scale-110 transition">
+                                    <i class="fab fa-tiktok"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Maps -->
+                <div class="reveal rounded-3xl overflow-hidden shadow-2xl h-[400px] md:h-full">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27224.22461859152!2d74.41149907431641!3d31.468413800000018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391909883bf615b1%3A0x18886659a116e122!2sGlow%20with%20gull!5e0!3m2!1sen!2s!4v1779792997974!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- Brand -->
+                <div>
+                    <h3 class="text-3xl font-serif font-bold mb-4 text-blush">Glow with Gull</h3>
+                    <p class="text-gray-400 mb-4">
+                        DHA Lahore's premier luxury beauty salon, dedicated to enhancing your natural beauty.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="https://www.facebook.com/glowwithgull" target="_blank" class="w-10 h-10 bg-blush/20 rounded-full flex items-center justify-center hover:bg-blush transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/glowwithgull" target="_blank" class="w-10 h-10 bg-blush/20 rounded-full flex items-center justify-center hover:bg-blush transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/923141114855" target="_blank" class="w-10 h-10 bg-blush/20 rounded-full flex items-center justify-center hover:bg-blush transition">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@glowwithgull" target="_blank" class="w-10 h-10 bg-blush/20 rounded-full flex items-center justify-center hover:bg-blush transition">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-xl font-bold mb-4 text-blush">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-blush transition">Home</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-blush transition">About Us</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-blush transition">Services</a></li>
+                        <li><a href="#gallery" class="text-gray-400 hover:text-blush transition">Gallery</a></li>
+                        <li><a href="#booking" class="text-gray-400 hover:text-blush transition">Book Now</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="text-xl font-bold mb-4 text-blush">Our Services</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">Bridal Makeup</li>
+                        <li class="text-gray-400">Hydra Facial</li>
+                        <li class="text-gray-400">Hair Styling</li>
+                        <li class="text-gray-400">Nail Art</li>
+                        <li class="text-gray-400">Skin Treatments</li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-xl font-bold mb-4 text-blush">Contact Info</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mr-3 mt-1 text-blush"></i>
+                            <span>176 CCA 3rd floor DHA phase 6, Lahore</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-blush"></i>
+                            <a href="tel:+923141114855" class="hover:text-blush transition">+92 314 1114855</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-clock mr-3 text-blush"></i>
+                            <span>11 AM - 8 PM</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Glow with Gull. All Rights Reserved. | Designed with <i class="fas fa-heart text-blush"></i> for Beauty</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/923141114855?text=Hi!%20I%20would%20like%20to%20book%20an%20appointment%20at%20Glow%20with%20Gull" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp text-3xl text-white"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        // Floating Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Navbar Scroll Effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when link clicked
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current) + '+';
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target + '+';
+                    }
+                };
+                
+                // Start animation when element is in view
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                observer.observe(counter);
+            });
+        }
+
+        animateCounters();
+
+        // Form Submission
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const phone = formData.get('phone');
+            const service = formData.get('service');
+            const date = formData.get('date');
+            const message = formData.get('message');
+            
+            const whatsappMessage = `Hello! I would like to book an appointment:%0A%0AName: ${name}%0APhone: ${phone}%0AService: ${service}%0ADate: ${date}%0AMessage: ${message}`;
+            
+            window.open(`https://wa.me/923141114855?text=${whatsappMessage}`, '_blank');
+            
+            this.reset();
+        });
+
+        // Lazy Loading Images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src || img.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Add hover effect to buttons
+        document.querySelectorAll('.luxury-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Gallery lightbox effect (simple implementation)
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const img = this.querySelector('img');
+                // You can implement a full lightbox here
+                console.log('Image clicked:', img.src);
+            });
+        });
+
+        // Prevent right-click on images (optional)
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+
+        // Add animation to service cards on hover
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-15px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Performance optimization: Debounce scroll events
+        function debounce(func, wait = 10, immediate = true) {
+            let timeout;
+            return function() {
+                const context = this, args = arguments;
+                const later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                const callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        }
+
+        window.addEventListener('scroll', debounce(reveal));
+
+        // Add current year to footer
+        const yearElement = document.querySelector('footer p');
+        if (yearElement) {
+            yearElement.innerHTML = yearElement.innerHTML.replace('2024', new Date().getFullYear());
+        }
+
+        // Preload critical images
+        const criticalImages = [
+            'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1920&q=80'
+        ];
+
+        criticalImages.forEach(src => {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = src;
+            document.head.appendChild(link);
+        });
+
+        // Add touch support for mobile
+        if ('ontouchstart' in window) {
+            document.querySelectorAll('.service-card, .gallery-item, .testimonial-card').forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                el.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
+    </script>
+</body>
+</html>
